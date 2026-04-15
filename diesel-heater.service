@@ -1,0 +1,35 @@
+# /etc/systemd/system/diesel-heater.service
+#
+# Runs the heater schedule at boot (or on demand).
+# Useful for a fully automated drying cycle on a fixed schedule.
+#
+# Install:
+#   sudo cp diesel-heater.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable diesel-heater.service   # start on boot
+#   sudo systemctl start  diesel-heater.service   # start now
+#   sudo systemctl stop   diesel-heater.service   # stop (sends OFF code)
+#
+# To run once manually without enabling on boot:
+#   sudo systemctl start diesel-heater.service
+
+[Unit]
+Description=Diesel Heater 433MHz Controller
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/heater schedule --delay 0 --run-for 180
+ExecStop=/usr/local/bin/heater off
+Restart=no
+StandardOutput=journal
+StandardError=journal
+
+# Safety: if the process crashes, send OFF to be safe
+# (only effective if heater off can still reach the device)
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

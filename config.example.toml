@@ -1,0 +1,63 @@
+# diesel_heater config.toml
+#
+# Place this file at:
+#   ~/.config/diesel_heater/config.toml   (single user)
+#   /etc/diesel_heater/config.toml        (system-wide)
+#
+# ─────────────────────────────────────────────────────────────────────
+# HOW TO FIND YOUR RF CODES
+# ─────────────────────────────────────────────────────────────────────
+# 1. Wire your 433MHz receiver data pin to GPIO 27 (BCM) on the Pi.
+# 2. Run:  heater capture
+# 3. Point your diesel heater remote at the receiver and press
+#    the ON button. Note the Code, Protocol, and Pulselength printed.
+# 4. Press the OFF button and note its code.
+# 5. Fill in the values below.
+# ─────────────────────────────────────────────────────────────────────
+
+[rf]
+# BCM GPIO pin connected to the 433MHz TX module's DATA pin
+gpio_pin    = 17
+
+# Protocol number from capture (usually 1)
+protocol    = 1
+
+# Pulse length in microseconds from capture (commonly 300–500)
+pulselength = 350
+
+# Bit length of the code from capture (commonly 24)
+code_length = 24
+
+# !! REPLACE THESE WITH YOUR OWN CODES FROM heater capture !!
+code_on     = 0
+code_off    = 0
+
+# How many times to repeat the transmission for reliability
+repeat_tx   = 10
+
+
+[buttons]
+# BCM GPIO pin for the physical START button (button leg → pin, other leg → GND)
+start_pin   = 23
+
+# BCM GPIO pin for the physical STOP button
+stop_pin    = 24
+
+# Optional: BCM GPIO pin for a status LED (LED+ → pin via 330Ω resistor → GND)
+# Remove or comment out if not using an LED
+led_pin     = 25
+
+# Schedule to run when START is pressed (overrides [schedule] values below)
+delay_min   = 0
+run_for_min = 180
+
+
+[schedule]
+# Default delay before starting (minutes). 0 = start immediately.
+# Override with:  heater schedule --delay 60
+delay_min   = 0
+
+# Default auto-shutdown duration (minutes). Remove or set to 0 for no limit.
+# Override with:  heater schedule --run-for 180
+# 180 = 3 hours (suitable for drying breathing apparatus clothing)
+run_for_min = 180

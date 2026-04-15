@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "diesel-heater"
+version = "1.0.0"
+description = "Control a Chinese diesel heater via 433MHz RF from a Raspberry Pi"
+readme = "README.md"
+license = { text = "BSD-2-Clause" }
+requires-python = ">=3.9"
+
+dependencies = [
+    # rpi-rf handles GPIO 433MHz transmission
+    # On Pi: pip install rpi-rf RPi.GPIO
+    # On non-Pi dev machines these are omitted (simulation mode is used)
+]
+
+[project.optional-dependencies]
+pi = [
+    "rpi-rf>=0.9.7",
+    "RPi.GPIO>=0.7.1",
+]
+# Python < 3.11 needs the tomli backport for config file parsing
+toml = [
+    "tomli>=2.0; python_version < '3.11'",
+]
+all = [
+    "rpi-rf>=0.9.7",
+    "RPi.GPIO>=0.7.1",
+    "tomli>=2.0; python_version < '3.11'",
+]
+
+[project.scripts]
+heater = "diesel_heater.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["diesel_heater*"]
