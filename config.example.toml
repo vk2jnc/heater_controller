@@ -3,61 +3,55 @@
 # Place this file at:
 #   ~/.config/diesel_heater/config.toml   (single user)
 #   /etc/diesel_heater/config.toml        (system-wide)
-#
-# ─────────────────────────────────────────────────────────────────────
-# HOW TO FIND YOUR RF CODES
-# ─────────────────────────────────────────────────────────────────────
-# 1. Wire your 433MHz receiver data pin to GPIO 27 (BCM) on the Pi.
-# 2. Run:  heater capture
-# 3. Point your diesel heater remote at the receiver and press
-#    the ON button. Note the Code, Protocol, and Pulselength printed.
-# 4. Press the OFF button and note its code.
-# 5. Fill in the values below.
-# ─────────────────────────────────────────────────────────────────────
 
 [rf]
-# BCM GPIO pin connected to the 433MHz TX module's DATA pin
+# BCM GPIO pin connected to the 433MHz TX module DATA pin
 gpio_pin    = 17
 
-# Protocol number from capture (usually 1)
-protocol    = 1
+# ── Codes captured via rtl_433 -A (House Code: 47010) ──────────────
+code_off    = 76301496   # 0x485d4b8  Command 180
+code_on     = 76300408   # 0x485d478  Command 184
+code_up     = 76301544   # 0x485d4e8  Command 177  (power +)
+code_down   = 76301528   # 0x485d4d8  Command 178  (power -)
 
-# Pulse length in microseconds from capture (commonly 300–500)
-pulselength = 350
+# ── Hold durations ──────────────────────────────────────────────────
+# The heater requires the button to be held for ~2-3 seconds to
+# register ON or OFF. Adjust if it isn't responding reliably.
+hold_on_seconds  = 2.5
+hold_off_seconds = 2.5
 
-# Bit length of the code from capture (commonly 24)
-code_length = 24
+# +/- only needs a brief press
+hold_adj_seconds = 0.5
 
-# !! REPLACE THESE WITH YOUR OWN CODES FROM heater capture !!
-code_on     = 0
-code_off    = 0
-
-# How many times to repeat the transmission for reliability
-repeat_tx   = 10
+# ── Pulse parameters (from rtl_433 capture — don't change unless
+#    you re-capture with a different remote) ────────────────────────
+short_us    = 390
+long_us     = 1220
+gap_us      = 435
+lgap_us     = 1252
+reset_us    = 12300
+bit_length  = 25
 
 
 [buttons]
-# BCM GPIO pin for the physical START button (button leg → pin, other leg → GND)
+# BCM GPIO pin for the physical START button (one leg → pin, other → GND)
 start_pin   = 23
 
 # BCM GPIO pin for the physical STOP button
 stop_pin    = 24
 
-# Optional: BCM GPIO pin for a status LED (LED+ → pin via 330Ω resistor → GND)
-# Remove or comment out if not using an LED
+# Optional status LED (LED anode → pin via 330Ω resistor → cathode → GND)
 led_pin     = 25
 
-# Schedule to run when START is pressed (overrides [schedule] values below)
+# Schedule triggered by START button press
 delay_min   = 0
 run_for_min = 180
 
 
 [schedule]
 # Default delay before starting (minutes). 0 = start immediately.
-# Override with:  heater schedule --delay 60
 delay_min   = 0
 
-# Default auto-shutdown duration (minutes). Remove or set to 0 for no limit.
-# Override with:  heater schedule --run-for 180
+# Auto-shutdown after this many minutes.
 # 180 = 3 hours (suitable for drying breathing apparatus clothing)
 run_for_min = 180
