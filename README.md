@@ -29,7 +29,7 @@ Wire TX VCC → 3.3V or 5V, GND → GND, DATA → GPIO 17.
 pip install --break-system-packages "diesel-heater[all]"
 
 # Or from source:
-git clone https://github.com/vk2jnc/heater_controller
+git clone <this-repo>
 cd diesel_heater_pkg
 pip install --break-system-packages ".[all]"
 ```
