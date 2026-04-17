@@ -38,13 +38,20 @@ except ImportError:
 
 _DEFAULTS: Dict[str, Any] = {
     "rf": {
-        "gpio_pin": 17,
-        "protocol": 1,
-        "pulselength": 350,
-        "code_length": 24,
-        "code_on": 0,
-        "code_off": 0,
-        "repeat_tx": 10,
+        "gpio_pin":          17,
+        "code_on":           76300408,   # 0x485d478
+        "code_off":          76301496,   # 0x485d4b8
+        "code_up":           76301544,   # 0x485d4e8
+        "code_down":         76301528,   # 0x485d4d8
+        "hold_on_seconds":   2.5,
+        "hold_off_seconds":  2.5,
+        "hold_adj_seconds":  0.5,
+        "short_us":          390,
+        "long_us":           1220,
+        "gap_us":            435,
+        "lgap_us":           1252,
+        "reset_us":          12300,
+        "bit_length":        25,
     },
     "schedule": {
         "delay_min": 0,
@@ -106,11 +113,18 @@ def load_config(path: str = None) -> Dict[str, Any]:
 def config_to_controller_kwargs(config: Dict[str, Any]) -> Dict[str, Any]:
     rf = config.get("rf", {})
     return {
-        "gpio_pin": rf.get("gpio_pin", 17),
-        "protocol": rf.get("protocol", 1),
-        "pulselength": rf.get("pulselength", 350),
-        "code_length": rf.get("code_length", 24),
-        "code_on": rf.get("code_on", 0),
-        "code_off": rf.get("code_off", 0),
-        "repeat_tx": rf.get("repeat_tx", 10),
+        "gpio_pin":          rf.get("gpio_pin",          17),
+        "code_on":           rf.get("code_on",           76300408),
+        "code_off":          rf.get("code_off",          76301496),
+        "code_up":           rf.get("code_up",           76301544),
+        "code_down":         rf.get("code_down",         76301528),
+        "hold_on_seconds":   rf.get("hold_on_seconds",   2.5),
+        "hold_off_seconds":  rf.get("hold_off_seconds",  2.5),
+        "hold_adj_seconds":  rf.get("hold_adj_seconds",  0.5),
+        "short_us":          rf.get("short_us",          390),
+        "long_us":           rf.get("long_us",           1220),
+        "gap_us":            rf.get("gap_us",            435),
+        "lgap_us":           rf.get("lgap_us",           1252),
+        "reset_us":          rf.get("reset_us",          12300),
+        "bit_length":        rf.get("bit_length",        25),
     }
